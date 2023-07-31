@@ -12,6 +12,8 @@ import android.os.Handler;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Button;
@@ -48,7 +50,33 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     TextView mTwoDaysAgo;
     TextView mYesterday;
 
+    FrameLayout mFrameOneWeekAgo;
+    FrameLayout mFrameSixDaysAgo;
+    FrameLayout mFrameFiveDaysAgo;
+    FrameLayout mFrameFourDaysAgo;
+    FrameLayout mFrameThreeDaysAgo;
+    FrameLayout mFrameTwoDaysAgo;
+    FrameLayout mFrameYesterday;
+
+    FrameLayout mFrameButtonOneWeekAgo;
+    FrameLayout mFrameButtonSixDaysAgo;
+    FrameLayout mFrameButtonFiveDaysAgo;
+    FrameLayout mFrameButtonFourDaysAgo;
+    FrameLayout mFrameButtonThreeDaysAgo;
+    FrameLayout mFrameButtonTwoDaysAgo;
+    FrameLayout mFrameButtonYesterday;
+
     Button mGameButton1;
+
+
+    ImageButton mone_week_ago_button_noteadd;
+    ImageButton msix_days_ago_button_noteadd;
+    ImageButton mfive_days_ago_button_noteadd;
+    ImageButton mfour_days_ago_button_noteadd;
+    ImageButton mthree_days_ago_button_noteadd;
+    ImageButton mtwo_days_ago_button_noteadd;
+    ImageButton myesterday_button_noteadd;
+
 
     MoodHistory mMoodHistory;
 
@@ -95,6 +123,30 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             mTwoDaysAgo = findViewById(R.id.two_days_ago_text);
             mYesterday = findViewById(R.id.yesterday_text);
 
+            mFrameOneWeekAgo = findViewById(R.id.one_week_ago_left);
+            mFrameSixDaysAgo = findViewById(R.id.six_days_ago_left);
+            mFrameFiveDaysAgo = findViewById(R.id.five_days_ago_left);
+            mFrameFourDaysAgo = findViewById(R.id.four_days_ago_left);
+            mFrameThreeDaysAgo = findViewById(R.id.three_days_ago_left);
+            mFrameTwoDaysAgo = findViewById(R.id.two_days_ago_left);
+            mFrameYesterday = findViewById(R.id.yesterday_left);
+
+            mFrameButtonOneWeekAgo = findViewById(R.id.one_week_ago_right);
+            mFrameButtonSixDaysAgo = findViewById(R.id.six_days_ago_right);
+            mFrameButtonFiveDaysAgo = findViewById(R.id.five_days_ago_right);
+            mFrameButtonFourDaysAgo = findViewById(R.id.four_days_ago_right);
+            mFrameButtonThreeDaysAgo = findViewById(R.id.three_days_ago_right);
+            mFrameButtonTwoDaysAgo = findViewById(R.id.two_days_ago_right);
+            mFrameButtonYesterday = findViewById(R.id.yesterday_right);
+
+            mone_week_ago_button_noteadd=findViewById(R.id.one_week_ago_button_noteadd);
+            msix_days_ago_button_noteadd=findViewById(R.id.six_days_ago_button_noteadd);
+            mfive_days_ago_button_noteadd=findViewById(R.id.five_days_ago_button_noteadd);
+            mfour_days_ago_button_noteadd=findViewById(R.id.four_days_ago_button_noteadd);
+            mthree_days_ago_button_noteadd=findViewById(R.id.three_days_ago_button_noteadd);
+            mtwo_days_ago_button_noteadd=findViewById(R.id.two_days_ago_button_noteadd);
+            myesterday_button_noteadd=findViewById(R.id.yesterday_button_noteadd);
+
             mMoodHistory = new MoodHistory();
 
 
@@ -115,13 +167,62 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
             //mMoodHistory.setMoodList(Arrays.stream(mMoodHistoryCsv.split(",")).mapToInt(Integer::parseInt).toArray());
 
-            updateMood(mOneWeekAgo, 0);
-            updateMood(mSixDaysAgo, 1);
-            updateMood(mFiveDaysAgo, 2);
-            updateMood(mFourDaysAgo, 3);
-            updateMood(mThreeDaysAgo, 4);
-            updateMood(mTwoDaysAgo, 5);
-            updateMood(mYesterday, 6);
+            String mone_week_ago_button_noteadd_text=updateMood(mOneWeekAgo, 0,mFrameOneWeekAgo, mFrameButtonOneWeekAgo,mone_week_ago_button_noteadd);
+            String msix_days_ago_button_noteadd_text=updateMood(mSixDaysAgo, 1,mFrameSixDaysAgo, mFrameButtonSixDaysAgo,msix_days_ago_button_noteadd);
+            String mfive_days_ago_button_noteadd_text=updateMood(mFiveDaysAgo, 2, mFrameFiveDaysAgo, mFrameButtonFiveDaysAgo,mfive_days_ago_button_noteadd);
+            String mfour_days_ago_button_noteadd_text=updateMood(mFourDaysAgo, 3, mFrameFourDaysAgo, mFrameButtonFourDaysAgo,mfour_days_ago_button_noteadd);
+            String mthree_days_ago_button_noteadd_text=updateMood(mThreeDaysAgo, 4, mFrameThreeDaysAgo, mFrameButtonThreeDaysAgo,mthree_days_ago_button_noteadd);
+            String mtwo_days_ago_button_noteadd_text=updateMood(mTwoDaysAgo, 5, mFrameTwoDaysAgo, mFrameButtonTwoDaysAgo,mtwo_days_ago_button_noteadd);
+            String myesterday_button_noteadd_text=updateMood(mYesterday, 6, mFrameYesterday, mFrameButtonYesterday,myesterday_button_noteadd);
+
+            mone_week_ago_button_noteadd.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(GameActivity.this, mone_week_ago_button_noteadd_text, Toast.LENGTH_LONG).show();
+                }
+            });
+
+            msix_days_ago_button_noteadd.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(GameActivity.this, msix_days_ago_button_noteadd_text, Toast.LENGTH_LONG).show();
+                }
+            });
+
+            mfive_days_ago_button_noteadd.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(GameActivity.this, mfive_days_ago_button_noteadd_text, Toast.LENGTH_LONG).show();
+                }
+            });
+
+            mfour_days_ago_button_noteadd.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(GameActivity.this, mfour_days_ago_button_noteadd_text, Toast.LENGTH_LONG).show();
+                }
+            });
+
+            mthree_days_ago_button_noteadd.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(GameActivity.this, mthree_days_ago_button_noteadd_text, Toast.LENGTH_LONG).show();
+                }
+            });
+
+            mtwo_days_ago_button_noteadd.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(GameActivity.this, mtwo_days_ago_button_noteadd_text, Toast.LENGTH_LONG).show();
+                }
+            });
+
+            myesterday_button_noteadd.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(GameActivity.this, myesterday_button_noteadd_text, Toast.LENGTH_LONG).show();
+                }
+            });
         }
         catch (Exception e){
             System.out.println("Error in History Activity");
@@ -130,12 +231,28 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    void updateMood(TextView mDay,int mPosition){
+    String updateMood(TextView mDay,int mPosition, FrameLayout mFrame, FrameLayout mFrameButton, ImageButton mImageButton){
         Mood currentMood=moodList.get(mPosition);
         mDay.setBackgroundColor(getColor(mImageMap.getImageToColor().get(currentMood.getMoodStatus())));
+        mFrameButton.setBackgroundColor(getColor(mImageMap.getImageToColor().get(currentMood.getMoodStatus())));
         ViewGroup.LayoutParams params=mDay.getLayoutParams();
         params.width=mImageMap.getImageToWidth().get(currentMood.getMoodStatus());
+
+        System.out.println(currentMood.getMoodComment());
+        if(currentMood.getMoodComment().isEmpty() || currentMood.getMoodComment().equals("")){
+            mImageButton.setVisibility(View.INVISIBLE);
+        }
+
+
+
+        currentMood.getMoodComment();
         mDay.setLayoutParams(params);
+        //mFrame.setLayoutParams(params);
+        ViewGroup.LayoutParams frameparams=mFrame.getLayoutParams();
+        frameparams.width=mImageMap.getImageToWidth().get(currentMood.getMoodStatus());
+
+        mFrame.setLayoutParams(frameparams);
+        return currentMood.getMoodComment();
     }
 
     public String getDefaultMoodList(){
@@ -144,13 +261,13 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
         try {
             moodListDefault = new ArrayList();
+            moodListDefault.add(new Mood(R.drawable.ic_smiley_happy, "Super Happy"));
+            moodListDefault.add(new Mood(R.drawable.ic_smiley_disappointed, "Hmm"));
+            moodListDefault.add(new Mood(R.drawable.ic_smiley_normal, ""));
             moodListDefault.add(new Mood(0, ""));
-            moodListDefault.add(new Mood(0, ""));
-            moodListDefault.add(new Mood(0, ""));
-            moodListDefault.add(new Mood(0, ""));
-            moodListDefault.add(new Mood(0, ""));
-            moodListDefault.add(new Mood(0, ""));
-            moodListDefault.add(new Mood(0, ""));
+            moodListDefault.add(new Mood(R.drawable.ic_smiley_super_happy, "Wow again"));
+            moodListDefault.add(new Mood(R.drawable.ic_smiley_sad, ""));
+            moodListDefault.add(new Mood(R.drawable.ic_smiley_happy, "Happy Happy"));
 
             moodHistoryDefault = mapper.writeValueAsString(moodListDefault);
         }

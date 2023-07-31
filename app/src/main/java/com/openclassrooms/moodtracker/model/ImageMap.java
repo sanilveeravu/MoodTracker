@@ -18,12 +18,12 @@ public class ImageMap {
         imageToColor.put(R.drawable.ic_smiley_normal, R.color.cornflower_blue_65);
         imageToColor.put(0, R.color.light_grey);
 
-        imageToWidth.put(R.drawable.ic_smiley_happy, 860);
-        imageToWidth.put(R.drawable.ic_smiley_super_happy, 1075);
-        imageToWidth.put(R.drawable.ic_smiley_sad, 215);
-        imageToWidth.put(R.drawable.ic_smiley_disappointed, 430);
-        imageToWidth.put(R.drawable.ic_smiley_normal, 645);
-        imageToWidth.put(0, 645);
+        imageToWidth.put(R.drawable.ic_smiley_happy, 860-150);
+        imageToWidth.put(R.drawable.ic_smiley_super_happy, 1075-150);
+        imageToWidth.put(R.drawable.ic_smiley_sad, 280-150);
+        imageToWidth.put(R.drawable.ic_smiley_disappointed, 430-150);
+        imageToWidth.put(R.drawable.ic_smiley_normal, 645-150);
+        imageToWidth.put(0, 645-150);
 
     }
 
