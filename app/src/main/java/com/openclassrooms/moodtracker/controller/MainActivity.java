@@ -1,9 +1,13 @@
 package com.openclassrooms.moodtracker.controller;
 
 import android.app.AlertDialog;
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
+import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -24,6 +28,7 @@ import android.widget.Toast;
 
 import com.openclassrooms.moodtracker.R;
 import com.openclassrooms.moodtracker.model.ImageMap;
+import com.openclassrooms.moodtracker.service.HistoryJob;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -40,6 +45,8 @@ public class MainActivity extends AppCompatActivity {
     EditText mNameEditText;
     ImageButton mMoodButton;
     GestureDetector mGestureDetector;
+
+    MediaPlayer mMediaPlayer;
 
     LinearLayoutCompat mBackground;
 
@@ -74,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         mImageMap=new ImageMap();
         setContentView(R.layout.activity_main);
+
 
 //        String firstName=getSharedPreferences(SHARED_PREF_USER_INFO,MODE_PRIVATE)
 //                .getString(SHARED_PERF_USER_INFO_NAME,null);
@@ -110,7 +118,8 @@ public class MainActivity extends AppCompatActivity {
                         .edit()
                         .putInt(SHARED_USER_MOOD,imageSequence.get(currentIndex))
                         .commit();
-                Toast.makeText(MainActivity.this, "You clicked Happy", Toast.LENGTH_LONG).show();
+                playSound(imageSequence.get(currentIndex));
+                //Toast.makeText(MainActivity.this, "You clicked Happy", Toast.LENGTH_LONG).show();
 
             }
         });
@@ -171,7 +180,33 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         mGestureDetector = new GestureDetector(this, new GestureListener());
+        scheduleJob();
     }
+
+    public void scheduleJob(){
+        ComponentName componentName = new ComponentName(this, HistoryJob.class);
+        JobInfo info = new JobInfo.Builder(123, componentName)
+                .setRequiresCharging(false)
+                .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
+                .setPersisted(true)
+                .setPeriodic(1 * 60 * 1000)
+                .build();
+
+        JobScheduler scheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
+        int resultCode = scheduler.schedule(info);
+        if (resultCode == JobScheduler.RESULT_SUCCESS){
+            System.out.println("Job Successful");
+        } else {
+            System.out.println("Job Failed");
+        }
+    }
+
+    public void cancelJob(View v){
+        JobScheduler scheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
+        scheduler.cancel(123);
+        System.out.println("Job Cancelled");
+    }
+
 
     private class GestureListener extends GestureDetector.SimpleOnGestureListener {
         @Override
@@ -201,6 +236,30 @@ public class MainActivity extends AppCompatActivity {
     public boolean onTouchEvent(MotionEvent event) {
         mGestureDetector.onTouchEvent(event);
         return super.onTouchEvent(event);
+    }
+
+    private void playSound(int moodNumber){
+        String mood="";
+        //final MediaPlayer mp =MediaPlayer.create(this, R.raw.);
+        System.out.println("MoodNumber:"+moodNumber);
+
+        if (moodNumber==R.drawable.ic_smiley_super_happy){
+            MediaPlayer.create(this,R.raw.superhappy).start();
+            mood="Super Happy";
+        } else if (moodNumber==R.drawable.ic_smiley_sad) {
+            MediaPlayer.create(this,R.raw.sad).start();
+            mood="Sad";
+        } else if (moodNumber==R.drawable.ic_smiley_disappointed) {
+            MediaPlayer.create(this,R.raw.disappointed).start();
+            mood="Disappointed";
+        } else if (moodNumber==R.drawable.ic_smiley_normal) {
+            MediaPlayer.create(this,R.raw.normal).start();
+            mood="Normal";
+        } else if (moodNumber==R.drawable.ic_smiley_happy)  {
+            MediaPlayer.create(this,R.raw.happy).start();
+            mood="Happy";
+        }
+        Toast.makeText(MainActivity.this, mood, Toast.LENGTH_SHORT).show();
     }
 
 }
