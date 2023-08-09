@@ -1,7 +1,10 @@
 package com.openclassrooms.moodtracker.service;
 
+import android.app.job.JobInfo;
 import android.app.job.JobParameters;
+import android.app.job.JobScheduler;
 import android.app.job.JobService;
+import android.content.ComponentName;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -91,11 +94,40 @@ public class HistoryJob extends JobService {
                     .putString(MOOD_LIST,mapper.writeValueAsString(moodList))
                     .commit();
 
+            getSharedPreferences(SHARED_USER_DATA,MODE_PRIVATE)
+                    .edit()
+                    .putString(SHARED_USER_MOOD_COMMENT,"")
+                    .commit();
+
+            getSharedPreferences(SHARED_USER_DATA,MODE_PRIVATE)
+                    .edit()
+                    .putInt(SHARED_USER_MOOD,0)
+                    .commit();
+
             System.out.println(mapper.writeValueAsString(moodList));
 
         } catch (Exception e){
             System.out.println("Error In Job");
         }
+
+        ComponentName componentName = new ComponentName(this, HistoryJob.class);
+        JobInfo info = new JobInfo.Builder(123, componentName)
+                .setRequiresCharging(false)
+                .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
+                .setPersisted(true)
+                //.setPeriodic(1 * 60 * 1000)
+                .setMinimumLatency(60*1000)
+                .build();
+
+        JobScheduler scheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
+        int resultCode = scheduler.schedule(info);
+        if (resultCode == JobScheduler.RESULT_SUCCESS){
+            System.out.println("Job Successful");
+        } else {
+            System.out.println("Job Failed");
+        }
+
+        jobFinished(params,false);
 
 
         return false;

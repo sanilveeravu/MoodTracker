@@ -1,47 +1,32 @@
 package com.openclassrooms.moodtracker.controller;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.LinearLayoutCompat;
 
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
 import com.openclassrooms.moodtracker.R;
 import com.openclassrooms.moodtracker.model.ImageMap;
 import com.openclassrooms.moodtracker.model.Mood;
 import com.openclassrooms.moodtracker.model.MoodHistory;
-import com.openclassrooms.moodtracker.model.Question;
-import com.openclassrooms.moodtracker.model.QuestionBank;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 
-public class GameActivity extends AppCompatActivity implements View.OnClickListener
+public class HistoryActivity extends AppCompatActivity implements View.OnClickListener
 {
-
     public static final String MOOD_HISTORY = "MOOD_HISTORY";
     public static final String MOOD_LIST = "MOOD_LIST";
-
-    public static final String BUNDLE_STATE_QUESTION_COUNT = "BUNDLE_STATE_QUESTION_COUNT";
     TextView mOneWeekAgo;
     TextView mSixDaysAgo;
     TextView mFiveDaysAgo;
@@ -65,9 +50,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     FrameLayout mFrameButtonThreeDaysAgo;
     FrameLayout mFrameButtonTwoDaysAgo;
     FrameLayout mFrameButtonYesterday;
-
-    Button mGameButton1;
-
 
     ImageButton mone_week_ago_button_noteadd;
     ImageButton msix_days_ago_button_noteadd;
@@ -100,17 +82,14 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        //outState.putInt(BUNDLE_STATE_SCORE,mScore);
-        //outState.putInt(BUNDLE_STATE_QUESTION_COUNT,mRemainingQuestionCount);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         try {
 
             super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_game);
+            setContentView(R.layout.activity_history);
 
             mImageMap = new ImageMap();
 
@@ -149,23 +128,10 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
             mMoodHistory = new MoodHistory();
 
-
-
-//            getSharedPreferences(MOOD_HISTORY, MODE_PRIVATE)
-//                    .edit()
-//                    .putString(MOOD_LIST, moodHistoryDefault)
-//                    .commit();
-
             String moodHistoryJson = getSharedPreferences(MOOD_HISTORY, MODE_PRIVATE)
                     .getString(MOOD_LIST, getDefaultMoodList());
 
             moodList = mapper.readValue(moodHistoryJson, new TypeReference<List<Mood>>() {});
-
-
-
-            //moodList = mapper.readValue(moodHistoryJson, Mood[].class);
-
-            //mMoodHistory.setMoodList(Arrays.stream(mMoodHistoryCsv.split(",")).mapToInt(Integer::parseInt).toArray());
 
             String mone_week_ago_button_noteadd_text=updateMood(mOneWeekAgo, 0,mFrameOneWeekAgo, mFrameButtonOneWeekAgo,mone_week_ago_button_noteadd);
             String msix_days_ago_button_noteadd_text=updateMood(mSixDaysAgo, 1,mFrameSixDaysAgo, mFrameButtonSixDaysAgo,msix_days_ago_button_noteadd);
@@ -178,49 +144,49 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             mone_week_ago_button_noteadd.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(GameActivity.this, mone_week_ago_button_noteadd_text, Toast.LENGTH_LONG).show();
+                    Toast.makeText(HistoryActivity.this, mone_week_ago_button_noteadd_text, Toast.LENGTH_LONG).show();
                 }
             });
 
             msix_days_ago_button_noteadd.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(GameActivity.this, msix_days_ago_button_noteadd_text, Toast.LENGTH_LONG).show();
+                    Toast.makeText(HistoryActivity.this, msix_days_ago_button_noteadd_text, Toast.LENGTH_LONG).show();
                 }
             });
 
             mfive_days_ago_button_noteadd.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(GameActivity.this, mfive_days_ago_button_noteadd_text, Toast.LENGTH_LONG).show();
+                    Toast.makeText(HistoryActivity.this, mfive_days_ago_button_noteadd_text, Toast.LENGTH_LONG).show();
                 }
             });
 
             mfour_days_ago_button_noteadd.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(GameActivity.this, mfour_days_ago_button_noteadd_text, Toast.LENGTH_LONG).show();
+                    Toast.makeText(HistoryActivity.this, mfour_days_ago_button_noteadd_text, Toast.LENGTH_LONG).show();
                 }
             });
 
             mthree_days_ago_button_noteadd.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(GameActivity.this, mthree_days_ago_button_noteadd_text, Toast.LENGTH_LONG).show();
+                    Toast.makeText(HistoryActivity.this, mthree_days_ago_button_noteadd_text, Toast.LENGTH_LONG).show();
                 }
             });
 
             mtwo_days_ago_button_noteadd.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(GameActivity.this, mtwo_days_ago_button_noteadd_text, Toast.LENGTH_LONG).show();
+                    Toast.makeText(HistoryActivity.this, mtwo_days_ago_button_noteadd_text, Toast.LENGTH_LONG).show();
                 }
             });
 
             myesterday_button_noteadd.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(GameActivity.this, myesterday_button_noteadd_text, Toast.LENGTH_LONG).show();
+                    Toast.makeText(HistoryActivity.this, myesterday_button_noteadd_text, Toast.LENGTH_LONG).show();
                 }
             });
         }
@@ -261,13 +227,13 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
         try {
             moodListDefault = new ArrayList();
-            moodListDefault.add(new Mood(R.drawable.ic_smiley_happy, "Super Happy"));
-            moodListDefault.add(new Mood(R.drawable.ic_smiley_disappointed, "Hmm"));
-            moodListDefault.add(new Mood(R.drawable.ic_smiley_normal, ""));
             moodListDefault.add(new Mood(0, ""));
-            moodListDefault.add(new Mood(R.drawable.ic_smiley_super_happy, "Wow again"));
-            moodListDefault.add(new Mood(R.drawable.ic_smiley_sad, ""));
-            moodListDefault.add(new Mood(R.drawable.ic_smiley_happy, "Happy Happy"));
+            moodListDefault.add(new Mood(0, ""));
+            moodListDefault.add(new Mood(0, ""));
+            moodListDefault.add(new Mood(0, ""));
+            moodListDefault.add(new Mood(0, ""));
+            moodListDefault.add(new Mood(0, ""));
+            moodListDefault.add(new Mood(0, ""));
 
             moodHistoryDefault = mapper.writeValueAsString(moodListDefault);
         }
@@ -281,33 +247,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        int index;
-//        if (v == mGameButton1) {
-//            index = 0;
-//        } else if (v == mGameButton2) {
-//            index = 1;
-//        } else if (v == mGameButton3) {
-//            index = 2;
-//        } else if (v == mGameButton4) {
-//            index = 3;
-//        } else {
-//            throw new IllegalStateException("Unknown View " + v);
-//        }
-//
-//        if (index == mQuestionBank.getCurrentQuestion().getAnswerIndex()){
-//            mScore++;
-//            Toast.makeText(this, "Correct", Toast.LENGTH_LONG).show();
-//        } else {
-//            Toast.makeText(this, "Incorrect", Toast.LENGTH_LONG).show();
-//        }
-//        mEnableTouchEvents = false;
-//        new Handler().postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                endGame();
-//                mEnableTouchEvents = true;
-//            }
-//        },2000);
+
     }
 
 }

@@ -6,7 +6,6 @@ import android.app.job.JobScheduler;
 import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 
@@ -14,29 +13,23 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.LinearLayoutCompat;
 
-import android.text.Editable;
-import android.text.InputType;
-import android.text.TextWatcher;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.openclassrooms.moodtracker.R;
 import com.openclassrooms.moodtracker.model.ImageMap;
 import com.openclassrooms.moodtracker.service.HistoryJob;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    public static final int GAME_ACTIVITY_REQUEST_CODE = 42;
+    public static final int HISTORY_ACTIVITY_REQUEST_CODE = 42;
     public static final String SHARED_USER_DATA = "SHARED_USER_DATA";
     public static final String SHARED_USER_MOOD = "SHARED_INDEX_COUNTER";
     public static final String SHARED_USER_MOOD_COMMENT = "SHARED_USER_MOOD_COMMENT";
@@ -70,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(GAME_ACTIVITY_REQUEST_CODE == requestCode && RESULT_OK == resultCode){
+        if(HISTORY_ACTIVITY_REQUEST_CODE == requestCode && RESULT_OK == resultCode){
             // fetch score from intent
             //int score = data.getIntExtra(GameActivity.BUNDLE_EXTRA_SCORE,0);
         }
@@ -82,34 +75,10 @@ public class MainActivity extends AppCompatActivity {
         mImageMap=new ImageMap();
         setContentView(R.layout.activity_main);
 
-
-//        String firstName=getSharedPreferences(SHARED_PREF_USER_INFO,MODE_PRIVATE)
-//                .getString(SHARED_PERF_USER_INFO_NAME,null);
-
-//        mGreetingTextView = findViewById(R.id.main_textview_greeting);
-//        mNameEditText = findViewById(R.id.main_edittext_greeting);
         mMoodButton = findViewById(R.id.main_button_happysmiley);
         mBackground = (LinearLayoutCompat) findViewById(R.id.main_background);
         mMainNoteaddButton = findViewById(R.id.main_button_noteadd);
         mMainHistoryButton = findViewById(R.id.main_button_history);
-
-//        mPlayButton.setEnabled(false);
-//        mNameEditText.addTextChangedListener(new TextWatcher() {
-//            @Override
-//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//
-//            }
-//
-//            @Override
-//            public void onTextChanged(CharSequence s, int start, int before, int count) {
-//
-//            }
-//
-//            @Override
-//            public void afterTextChanged(Editable s) {
-//                mPlayButton.setEnabled(!s.toString().isEmpty());
-//            }
-//        });
 
         mMoodButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -119,8 +88,6 @@ public class MainActivity extends AppCompatActivity {
                         .putInt(SHARED_USER_MOOD,imageSequence.get(currentIndex))
                         .commit();
                 playSound(imageSequence.get(currentIndex));
-                //Toast.makeText(MainActivity.this, "You clicked Happy", Toast.LENGTH_LONG).show();
-
             }
         });
 
@@ -130,8 +97,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Toast.makeText(MainActivity.this, "You clicked History", Toast.LENGTH_LONG).show();
-                Intent gameActivityIntent = new Intent(MainActivity.this, GameActivity.class);
-                startActivityForResult(gameActivityIntent, GAME_ACTIVITY_REQUEST_CODE);
+                Intent historyActivityIntent = new Intent(MainActivity.this, HistoryActivity.class);
+                startActivityForResult(historyActivityIntent, HISTORY_ACTIVITY_REQUEST_CODE);
 
             }
         });
@@ -143,13 +110,9 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 View customDialogView = getLayoutInflater().inflate(R.layout.custom_dialog, null);
-
-                //final EditText input = new EditText(MainActivity.this);
-
                 //customDialogView
                 EditText editText = customDialogView.findViewById(R.id.edit_text);
 
-                //input.setInputType(InputType.TYPE_CLASS_TEXT);
                 new AlertDialog.Builder(MainActivity.this)
                         //.setTitle("Comment")
                         //.setMessage("Comment")
@@ -174,8 +137,6 @@ public class MainActivity extends AppCompatActivity {
 
 
                 Toast.makeText(MainActivity.this, editText.getText().toString(), Toast.LENGTH_LONG).show();
-                //Intent gameActivityIntent = new Intent(MainActivity.this, GameActivity.class);
-//                startActivityForResult(gameActivityIntent, GAME_ACTIVITY_REQUEST_CODE);
 
             }
         });
@@ -189,7 +150,8 @@ public class MainActivity extends AppCompatActivity {
                 .setRequiresCharging(false)
                 .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
                 .setPersisted(true)
-                .setPeriodic(1 * 60 * 1000)
+                //.setPeriodic(1 * 60 * 1000)
+                .setMinimumLatency(60*1000)
                 .build();
 
         JobScheduler scheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
