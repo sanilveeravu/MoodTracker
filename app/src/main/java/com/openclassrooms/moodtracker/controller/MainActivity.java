@@ -8,11 +8,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
-
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.LinearLayoutCompat;
-
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -21,14 +16,22 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.LinearLayoutCompat;
+
 import com.openclassrooms.moodtracker.R;
 import com.openclassrooms.moodtracker.model.ImageMap;
 import com.openclassrooms.moodtracker.service.HistoryJob;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class MainActivity extends AppCompatActivity {
+
+    Logger logger = Logger.getLogger(MainActivity.class.getName());
+
     public static final int HISTORY_ACTIVITY_REQUEST_CODE = 42;
     public static final String SHARED_USER_DATA = "SHARED_USER_DATA";
     public static final String SHARED_USER_MOOD = "SHARED_INDEX_COUNTER";
@@ -157,16 +160,16 @@ public class MainActivity extends AppCompatActivity {
         JobScheduler scheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
         int resultCode = scheduler.schedule(info);
         if (resultCode == JobScheduler.RESULT_SUCCESS){
-            System.out.println("Job Successful");
+            logger.info("Job Successful");
         } else {
-            System.out.println("Job Failed");
+            logger.info("Job Failed");
         }
     }
 
     public void cancelJob(View v){
         JobScheduler scheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
         scheduler.cancel(123);
-        System.out.println("Job Cancelled");
+        logger.info("Job Cancelled");
     }
 
 
@@ -190,7 +193,7 @@ public class MainActivity extends AppCompatActivity {
                 mMoodButton.setImageResource(imageSequence.get(currentIndex));
                 mBackground.setBackgroundColor(getColor(mImageMap.getImageToColor().get(imageSequence.get(currentIndex))));
             }
-            System.out.println(e1.getX() + " " + e1.getY() + " " + e2.getX() + " " + e2.getY());
+            logger.info(e1.getX() + " " + e1.getY() + " " + e2.getX() + " " + e2.getY());
             return super.onFling(e1, e2, velocityX, velocityY);
         }
     }
@@ -203,7 +206,6 @@ public class MainActivity extends AppCompatActivity {
     private void playSound(int moodNumber){
         String mood="";
         //final MediaPlayer mp =MediaPlayer.create(this, R.raw.);
-        System.out.println("MoodNumber:"+moodNumber);
 
         if (moodNumber==R.drawable.ic_smiley_super_happy){
             MediaPlayer.create(this,R.raw.superhappy).start();

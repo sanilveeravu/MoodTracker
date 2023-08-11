@@ -1,7 +1,6 @@
 package com.openclassrooms.moodtracker.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.openclassrooms.moodtracker.R;
 
 public class Mood {
 

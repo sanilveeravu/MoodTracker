@@ -13,6 +13,7 @@ import com.openclassrooms.moodtracker.model.Mood;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class HistoryJob extends JobService {
 
@@ -26,14 +27,15 @@ public class HistoryJob extends JobService {
 
     ObjectMapper mapper = new ObjectMapper();
 
+    Logger logger = Logger.getLogger(HistoryJob.class.getName());
+
+
     @Override
     public boolean onStartJob(JobParameters params) {
         try {
-            System.out.println("test job");
+            logger.info("Schedule job started");
             String moodHistoryJson = getSharedPreferences(MOOD_HISTORY, MODE_PRIVATE)
                     .getString(MOOD_LIST, getDefaultMoodList());
-
-            System.out.println(moodHistoryJson);
 
             int mMood = getSharedPreferences(SHARED_USER_DATA, MODE_PRIVATE)
                     .getInt(SHARED_USER_MOOD, 0);
@@ -43,27 +45,13 @@ public class HistoryJob extends JobService {
 
             List<Mood> moodList = mapper.readValue(moodHistoryJson, new TypeReference<List<Mood>>() {});
 
-            System.out.print("m0");
             moodList.get(0).getMoodComment();
-
             Mood m1=moodList.get(1);
-            System.out.print("m1");
-            System.out.println(m1.getMoodComment());
-            System.out.print("m2");
             Mood m2=moodList.get(2);
-            System.out.println(m2.getMoodComment());
-            System.out.print("m3");
             Mood m3=moodList.get(3);
-            System.out.println(m3.getMoodComment());
-            System.out.print("m4");
             Mood m4=moodList.get(4);
-            System.out.println(m4.getMoodComment());
-            System.out.print("m5");
             Mood m5=moodList.get(5);
-            System.out.println(m5.getMoodComment());
-            System.out.print("m6");
             Mood m6=moodList.get(6);
-            System.out.println(m6.getMoodComment());
 
             moodList.clear();
             moodList.add(0,m1);
@@ -73,21 +61,11 @@ public class HistoryJob extends JobService {
             moodList.add(4,m5);
             moodList.add(5,m6);
 
-//            moodList.add(0,moodList.get(1));
-//            moodList.add(1,moodList.get(2));
-//            moodList.add(2,moodList.get(3));
-//            moodList.add(3,moodList.get(4));
-//            moodList.add(4,moodList.get(5));
-//            moodList.add(5,moodList.get(6));
-
             Mood currentMood=new Mood(mMood, mMoodComment);
 
             moodList.add(6,currentMood);
 
-            System.out.print("m7");
-            System.out.println(currentMood.getMoodComment());
-
-            System.out.println("done test job");
+            logger.info("done Scheduled job");
 
             getSharedPreferences(MOOD_HISTORY,MODE_PRIVATE)
                     .edit()
@@ -104,10 +82,9 @@ public class HistoryJob extends JobService {
                     .putInt(SHARED_USER_MOOD,0)
                     .commit();
 
-            System.out.println(mapper.writeValueAsString(moodList));
 
         } catch (Exception e){
-            System.out.println("Error In Job");
+            logger.info("Error In Job");
         }
 
         ComponentName componentName = new ComponentName(this, HistoryJob.class);
@@ -122,9 +99,9 @@ public class HistoryJob extends JobService {
         JobScheduler scheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
         int resultCode = scheduler.schedule(info);
         if (resultCode == JobScheduler.RESULT_SUCCESS){
-            System.out.println("Job Successful");
+            logger.info("Job Successful");
         } else {
-            System.out.println("Job Failed");
+            logger.info("Job Failed");
         }
 
         jobFinished(params,false);
@@ -157,7 +134,7 @@ public class HistoryJob extends JobService {
             moodHistoryDefault = mapper.writeValueAsString(moodListDefault);
         }
         catch (Exception e) {
-            System.out.println("Error in Defaulting") ;
+            logger.info("Error in Defaulting") ;
             e.printStackTrace();
         }
         return moodHistoryDefault;

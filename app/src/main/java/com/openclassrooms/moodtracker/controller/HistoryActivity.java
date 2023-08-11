@@ -1,8 +1,5 @@
 package com.openclassrooms.moodtracker.controller;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -12,19 +9,27 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.openclassrooms.moodtracker.R;
 import com.openclassrooms.moodtracker.model.ImageMap;
 import com.openclassrooms.moodtracker.model.Mood;
 import com.openclassrooms.moodtracker.model.MoodHistory;
+import com.openclassrooms.moodtracker.service.HistoryJob;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 
 public class HistoryActivity extends AppCompatActivity implements View.OnClickListener
 {
+
+    Logger logger = Logger.getLogger(HistoryJob.class.getName());
+
     public static final String MOOD_HISTORY = "MOOD_HISTORY";
     public static final String MOOD_LIST = "MOOD_LIST";
     TextView mOneWeekAgo;
@@ -191,7 +196,7 @@ public class HistoryActivity extends AppCompatActivity implements View.OnClickLi
             });
         }
         catch (Exception e){
-            System.out.println("Error in History Activity");
+            logger.info("Error in History Activity");
             e.printStackTrace();
         }
 
@@ -204,7 +209,6 @@ public class HistoryActivity extends AppCompatActivity implements View.OnClickLi
         ViewGroup.LayoutParams params=mDay.getLayoutParams();
         params.width=mImageMap.getImageToWidth().get(currentMood.getMoodStatus());
 
-        System.out.println(currentMood.getMoodComment());
         if(currentMood.getMoodComment().isEmpty() || currentMood.getMoodComment().equals("")){
             mImageButton.setVisibility(View.INVISIBLE);
         }
@@ -238,7 +242,7 @@ public class HistoryActivity extends AppCompatActivity implements View.OnClickLi
             moodHistoryDefault = mapper.writeValueAsString(moodListDefault);
         }
         catch (Exception e) {
-           System.out.println("Error in Defaulting") ;
+           logger.info("Error in Defaulting") ;
             e.printStackTrace();
         }
         return moodHistoryDefault;
